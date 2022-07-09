@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.github.karmada-io.karmada-apiserver</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>{{HOME}}/bin/kube-apiserver</string>
+        <string>--allow-privileged=true</string>
+        <string>--authorization-mode=Node,RBAC</string>
+        <string>--client-ca-file={{HOME}}/.karmada/server-ca.crt</string>
+        <string>--enable-admission-plugins=NodeRestriction</string>
+        <string>--enable-bootstrap-token-auth=true</string>
+        <string>--etcd-servers=http://127.0.0.1:2379</string>
+        <string>--bind-address=0.0.0.0</string>
+        <string>--insecure-port=0</string>
+        <string>--kubelet-client-certificate={{HOME}}/.karmada/karmada.crt</string>
+        <string>--kubelet-client-key={{HOME}}/.karmada/karmada.key</string>
+        <string>--kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname</string>
+        <string>--disable-admission-plugins=StorageObjectInUseProtection,ServiceAccount</string>
+        <string>--runtime-config=</string>
+        <string>--secure-port=5443</string>
+        <string>--service-account-issuer=https://127.0.0.1:5443</string>
+        <string>--service-account-key-file={{HOME}}/.karmada/karmada.key</string>
+        <string>--service-account-signing-key-file={{HOME}}/.karmada/karmada.key</string>
+        <string>--service-cluster-ip-range=10.96.0.0/12</string>
+        <string>--proxy-client-cert-file={{HOME}}/.karmada/front-proxy-client.crt</string>
+        <string>--proxy-client-key-file={{HOME}}/.karmada/front-proxy-client.key</string>
+        <string>--requestheader-allowed-names=front-proxy-client</string>
+        <string>--requestheader-client-ca-file={{HOME}}/.karmada/front-proxy-ca.crt</string>
+        <string>--requestheader-extra-headers-prefix=X-Remote-Extra-</string>
+        <string>--requestheader-group-headers=X-Remote-Group</string>
+        <string>--requestheader-username-headers=X-Remote-User</string>
+        <string>--tls-cert-file={{HOME}}/.karmada/karmada.crt</string>
+        <string>--tls-private-key-file={{HOME}}/.karmada/karmada.key</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardErrorPath</key>
+    <string>{{HOME}}/.karmada/logs/karmada-apiserver.error</string>
+    <key>StandardOutPath</key>
+    <string>{{HOME}}/.karmada/logs/karmada-apiserver.log</string>
+</dict>
+</plist>

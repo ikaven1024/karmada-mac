@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.github.karmada-io.karmada-controller-manager</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>{{HOME}}/bin/karmada-controller-manager</string>
+        <string>--kubeconfig={{HOME}}/.karmada/karmada-apiserver.config</string>
+        <string>--bind-address=0.0.0.0</string>
+        <string>--cluster-status-update-frequency=10s</string>
+        <string>--secure-port=10357</string>
+        <string>--metrics-bind-address=0</string>
+        <string>--feature-gates=PropagateDeps=true</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardErrorPath</key>
+    <string>{{HOME}}/.karmada/logs/karmada-controller-manager.error</string>
+    <key>StandardOutPath</key>
+    <string>{{HOME}}/.karmada/logs/karmada-controller-manager.log</string>
+</dict>
+</plist>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

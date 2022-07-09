@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.github.karmada-io.karmada-aggregated-apiserver</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>{{HOME}}/bin/karmada-aggregated-apiserver</string>
+        <string>--kubeconfig={{HOME}}/.karmada/karmada-apiserver.config</string>
+        <string>--authentication-kubeconfig={{HOME}}/.karmada/karmada-apiserver.config</string>
+        <string>--authorization-kubeconfig={{HOME}}/.karmada/karmada-apiserver.config</string>
+        <string>--etcd-servers=http://127.0.0.1:2379</string>
+        <string>--etcd-cafile={{HOME}}/.karmada/server-ca.crt</string>
+        <string>--etcd-certfile={{HOME}}/.karmada/karmada.crt</string>
+        <string>--etcd-keyfile={{HOME}}/.karmada/karmada.key</string>
+        <string>--tls-cert-file={{HOME}}/.karmada/karmada.crt</string>
+        <string>--tls-private-key-file={{HOME}}/.karmada/karmada.key</string>
+        <string>--audit-log-path=-</string>
+        <string>--feature-gates=APIPriorityAndFairness=false</string>
+        <string>--audit-log-maxage=0</string>
+        <string>--audit-log-maxbackup=0</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardErrorPath</key>
+    <string>{{HOME}}/.karmada/logs/karmada-aggregated-apiserver.error</string>
+    <key>StandardOutPath</key>
+    <string>{{HOME}}/.karmada/logs/karmada-aggregated-apiserver.log</string>
+</dict>
+</plist>

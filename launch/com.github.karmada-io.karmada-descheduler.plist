@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.github.karmada-io.karmada-descheduler</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>{{HOME}}/bin/karmada-descheduler</string>
+        <string>--kubeconfig={{HOME}}/.karmada/karmada-apiserver.config</string>
+        <string>--bind-address=0.0.0.0</string>
+        <string>--v=4</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardErrorPath</key>
+    <string>{{HOME}}/.karmada/logs/karmada-descheduler.error</string>
+    <key>StandardOutPath</key>
+    <string>{{HOME}}/.karmada/logs/karmada-descheduler.log</string>
+</dict>
+</plist>
