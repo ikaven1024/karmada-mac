@@ -14,65 +14,77 @@ This repository is committed to resolving this problem.
 
 ### Prerequisites
 
-##### Install karmada binaries
+##### Install binaries
 
+Build binaries and place them into `BIN_DIR`(default is `~/bin`, can be changed in `config`)
+
+1. Install karmada binaries
 ```shell
 git clone https://github.com/karmada-io/karmada.git
 cd karmada
 make
 cp _output/bin/$(uname -s)/$(uname -m)/* ~/bin/
-cd ..
 ```
 
-##### Install etcd binaries
+2. Install etcd binaries
 
 ```shell
 git clone https://github.com/etcd-io/etcd.git
 cd etcd
 make
-cp bin/{kube-apiserver,kube-controller-manager} ~/bin/
-cd ..
+cp bin/etcd ~/bin/
 ```
 
-##### Install kubernetes binaries
+3. Install kubernetes binaries
 
 ```shell
 git clone -b release-1.23 https://github.com/kubernetes/kubernetes.git
 cd kubernetes
 make kube-apiserver kube-controller-manager
 cp _out/bin/{kube-apiserver,kube-controller-manager} ~/bin/
-cd ..
 ```
 
-#### Clone this repository
+### Configure
 
+1. Clone this repository, and change to the directory:
 ```shell
 git clone https://github.com/ikaven1024/karmada-mac.git
+cd karmada-mac
 ```
 
-### Install karmada
+2. [Optional] Copy the `default.config`, and edit it:
+```shell
+cp default.config config
+vi config
+# TO EDIT YOUR CONFIG
+```
+
+> Both the `default.config` and `config` will be loaded, and later will override the values in the former.
+
+### Install Karmada
 
 Run this script to install Karmada.
 ```shell
-cd karmada-mac
 ./run.sh install
 ```
 
-When above is completed, Karmada is ready. You can access Karmada by
+When completed, Karmada is ready. You can access Karmada by
 ```shell
 kubectl --kubeconfig ~/.karmada/karmada-apiserver.config version -o yaml
 ```
 
+Or
+```shell
+export KUBECONFIG=~/.karmada/karmada-apiserver.config
+kubectl version -o yaml
+```
+
 ### Usage
 
-All the commands of `run.sh`:
-- install: install config files, and start karmada.
-- uninstall: stop karmada, and remove config files, and clean data.
-- start: run the karmada.
-- stop: stop the karmada.
-- status: show the status of processes.
-- help: print the usage of this script.
-
+See the usage by
+```shell
+./run.sh help
+```
 
 ## License
 

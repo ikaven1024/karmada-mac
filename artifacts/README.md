@@ -1,0 +1,1 @@
+These files are lifted from https://github.com/karmada-io/karmada/tree/master/artifacts/deploy.

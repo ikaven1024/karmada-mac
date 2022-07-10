@@ -6,8 +6,8 @@
     <string>com.github.karmada-io.karmada-descheduler</string>
     <key>ProgramArguments</key>
     <array>
-        <string>{{HOME}}/bin/karmada-descheduler</string>
-        <string>--kubeconfig={{HOME}}/.karmada/karmada-apiserver.config</string>
+        <string>{{BIN_DIR}}/karmada-descheduler</string>
+        <string>--kubeconfig={{KARMADA_KUBECONFIG}}</string>
         <string>--bind-address=0.0.0.0</string>
         <string>--v=4</string>
     </array>
@@ -16,8 +16,8 @@
     <key>KeepAlive</key>
     <true/>
     <key>StandardErrorPath</key>
-    <string>{{HOME}}/.karmada/logs/karmada-descheduler.error</string>
+    <string>{{LOG_DIR}}/karmada-descheduler.error</string>
     <key>StandardOutPath</key>
-    <string>{{HOME}}/.karmada/logs/karmada-descheduler.log</string>
+    <string>{{LOG_DIR}}/karmada-descheduler.log</string>
 </dict>
 </plist>

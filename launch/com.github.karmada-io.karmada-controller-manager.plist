@@ -6,11 +6,11 @@
     <string>com.github.karmada-io.karmada-controller-manager</string>
     <key>ProgramArguments</key>
     <array>
-        <string>{{HOME}}/bin/karmada-controller-manager</string>
-        <string>--kubeconfig={{HOME}}/.karmada/karmada-apiserver.config</string>
+        <string>{{BIN_DIR}}/karmada-controller-manager</string>
+        <string>--kubeconfig={{KARMADA_KUBECONFIG}}</string>
         <string>--bind-address=0.0.0.0</string>
         <string>--cluster-status-update-frequency=10s</string>
-        <string>--secure-port=10357</string>
+        <string>--secure-port={{KARMADA_CONTROLLER_MANAGER_SECURE_PORT}}</string>
         <string>--metrics-bind-address=0</string>
         <string>--feature-gates=PropagateDeps=true</string>
     </array>
@@ -19,9 +19,9 @@
     <key>KeepAlive</key>
     <true/>
     <key>StandardErrorPath</key>
-    <string>{{HOME}}/.karmada/logs/karmada-controller-manager.error</string>
+    <string>{{LOG_DIR}}/karmada-controller-manager.error</string>
     <key>StandardOutPath</key>
-    <string>{{HOME}}/.karmada/logs/karmada-controller-manager.log</string>
+    <string>{{LOG_DIR}}/karmada-controller-manager.log</string>
 </dict>
 </plist>
 

@@ -6,17 +6,17 @@
     <string>com.github.karmada-io.karmada-search</string>
     <key>ProgramArguments</key>
     <array>
-        <string>{{HOME}}/bin/karmada-search</string>
-        <string>--secure-port=6443</string>
-        <string>--kubeconfig={{HOME}}/.karmada/karmada-apiserver.config</string>
-        <string>--authentication-kubeconfig={{HOME}}/.karmada/karmada-apiserver.config</string>
-        <string>--authorization-kubeconfig={{HOME}}/.karmada/karmada-apiserver.config</string>
-        <string>--etcd-servers=http://127.0.0.1:2379</string>
-        <string>--etcd-cafile={{HOME}}/.karmada/server-ca.crt</string>
-        <string>--etcd-certfile={{HOME}}/.karmada/karmada.crt</string>
-        <string>--etcd-keyfile={{HOME}}/.karmada/karmada.key</string>
-        <string>--tls-cert-file={{HOME}}/.karmada/karmada.crt</string>
-        <string>--tls-private-key-file={{HOME}}/.karmada/karmada.key</string>
+        <string>{{BIN_DIR}}/karmada-search</string>
+        <string>--secure-port={{KARMADA_SEARCH_SECURE_PORT}}</string>
+        <string>--kubeconfig={{KARMADA_KUBECONFIG}}</string>
+        <string>--authentication-kubeconfig={{KARMADA_KUBECONFIG}}</string>
+        <string>--authorization-kubeconfig={{KARMADA_KUBECONFIG}}</string>
+        <string>--etcd-servers=https://127.0.0.1:{{ETCD_PORT}}</string>
+        <string>--etcd-cafile={{KARMADA_DIR}}/server-ca.crt</string>
+        <string>--etcd-certfile={{KARMADA_DIR}}/karmada.crt</string>
+        <string>--etcd-keyfile={{KARMADA_DIR}}/karmada.key</string>
+        <string>--tls-cert-file={{KARMADA_DIR}}/karmada.crt</string>
+        <string>--tls-private-key-file={{KARMADA_DIR}}/karmada.key</string>
         <string>--audit-log-path=-</string>
         <string>--feature-gates=APIPriorityAndFairness=false</string>
         <string>--audit-log-maxage=0</string>
@@ -27,8 +27,8 @@
     <key>KeepAlive</key>
     <true/>
     <key>StandardErrorPath</key>
-    <string>{{HOME}}/.karmada/logs/karmada-search.error</string>
+    <string>{{LOG_DIR}}/karmada-search.error</string>
     <key>StandardOutPath</key>
-    <string>{{HOME}}/.karmada/logs/karmada-search.log</string>
+    <string>{{LOG_DIR}}/karmada-search.log</string>
 </dict>
 </plist>

@@ -6,23 +6,23 @@
     <string>com.github.karmada-io.kube-controller-manager</string>
     <key>ProgramArguments</key>
     <array>
-        <string>{{HOME}}/bin/kube-controller-manager</string>
+        <string>{{BIN_DIR}}/kube-controller-manager</string>
         <string>--allocate-node-cidrs=true</string>
-        <string>--authentication-kubeconfig={{HOME}}/.karmada/karmada-apiserver.config</string>
-        <string>--authorization-kubeconfig={{HOME}}/.karmada/karmada-apiserver.config</string>
+        <string>--authentication-kubeconfig={{KARMADA_KUBECONFIG}}</string>
+        <string>--authorization-kubeconfig={{KARMADA_KUBECONFIG}}</string>
         <string>--bind-address=0.0.0.0</string>
-        <string>--client-ca-file={{HOME}}/.karmada/server-ca.crt</string>
+        <string>--client-ca-file={{KARMADA_DIR}}/server-ca.crt</string>
         <string>--cluster-cidr=10.244.0.0/16</string>
         <string>--cluster-name=karmada</string>
-        <string>--cluster-signing-cert-file={{HOME}}/.karmada/server-ca.crt</string>
-        <string>--cluster-signing-key-file={{HOME}}/.karmada/server-ca.key</string>
+        <string>--cluster-signing-cert-file={{KARMADA_DIR}}/server-ca.crt</string>
+        <string>--cluster-signing-key-file={{KARMADA_DIR}}/server-ca.key</string>
         <string>--controllers=namespace,garbagecollector,serviceaccount-token,ttl-after-finished</string>
-        <string>--kubeconfig={{HOME}}/.karmada/karmada-apiserver.config</string>
+        <string>--kubeconfig={{KARMADA_KUBECONFIG}}</string>
         <string>--leader-elect=true</string>
         <string>--node-cidr-mask-size=24</string>
         <string>--port=0</string>
-        <string>--root-ca-file={{HOME}}/.karmada/server-ca.crt</string>
-        <string>--service-account-private-key-file={{HOME}}/.karmada/karmada.key</string>
+        <string>--root-ca-file={{KARMADA_DIR}}/server-ca.crt</string>
+        <string>--service-account-private-key-file={{KARMADA_DIR}}/karmada.key</string>
         <string>--service-cluster-ip-range=10.96.0.0/12</string>
         <string>--use-service-account-credentials=true</string>
         <string>--v=4</string>
@@ -32,8 +32,8 @@
     <key>KeepAlive</key>
     <true/>
     <key>StandardErrorPath</key>
-    <string>{{HOME}}/.karmada/logs/kube-controller-manager.error</string>
+    <string>{{LOG_DIR}}/kube-controller-manager.error</string>
     <key>StandardOutPath</key>
-    <string>{{HOME}}/.karmada/logs/kube-controller-manager.log</string>
+    <string>{{LOG_DIR}}/kube-controller-manager.log</string>
 </dict>
 </plist>

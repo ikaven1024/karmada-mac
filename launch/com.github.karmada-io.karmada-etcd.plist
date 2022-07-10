@@ -6,16 +6,31 @@
     <string>com.github.karmada-io.karmada-etcd</string>
     <key>ProgramArguments</key>
     <array>
-        <string>{{HOME}}/bin/etcd</string>
-        <string>--data-dir={{HOME}}/.karmada/etcd</string>
+        <string>{{BIN_DIR}}/etcd</string>
+        <string>--name=etcd0</string>
+        <string>--listen-peer-urls=http://0.0.0.0:{{ETCD_PEER_PORT}}</string>
+        <string>--listen-client-urls=https://0.0.0.0:{{ETCD_PORT}}</string>
+        <string>--advertise-client-urls=https://localhost:{{ETCD_PORT}}</string>
+        <string>--initial-cluster=etcd0=http://localhost:{{ETCD_PEER_PORT}}</string>
+        <string>--initial-cluster-state=new</string>
+        <string>--cert-file={{KARMADA_DIR}}/karmada.crt</string>
+        <string>--client-cert-auth=true</string>
+        <string>--key-file={{KARMADA_DIR}}/karmada.key</string>
+        <string>--trusted-ca-file={{KARMADA_DIR}}/server-ca.crt</string>
+        <string>--data-dir={{KARMADA_DIR}}/etcd</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
     <key>KeepAlive</key>
     <true/>
     <key>StandardErrorPath</key>
-    <string>{{HOME}}/.karmada/logs/etcd.error</string>
+    <string>{{LOG_DIR}}/etcd.error</string>
     <key>StandardOutPath</key>
-    <string>{{HOME}}/.karmada/logs/etcd.log</string>
+    <string>{{LOG_DIR}}/etcd.log</string>
 </dict>
 </plist>
+
+
+
+
+

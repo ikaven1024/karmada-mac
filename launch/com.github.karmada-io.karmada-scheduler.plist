@@ -6,10 +6,10 @@
     <string>com.github.karmada-io.karmada-scheduler</string>
     <key>ProgramArguments</key>
     <array>
-        <string>{{HOME}}/bin/karmada-scheduler</string>
-        <string>--kubeconfig={{HOME}}/.karmada/karmada-apiserver.config</string>
+        <string>{{BIN_DIR}}/karmada-scheduler</string>
+        <string>--kubeconfig={{KARMADA_KUBECONFIG}}</string>
         <string>--bind-address=0.0.0.0</string>
-        <string>--secure-port=10351</string>
+        <string>--secure-port={{KARMADA_SCHEDULER_SECURE_PORT}}</string>
         <string>--feature-gates=Failover=true</string>
         <string>--enable-scheduler-estimator=true</string>
         <string>--v=4</string>
@@ -19,8 +19,8 @@
     <key>KeepAlive</key>
     <true/>
     <key>StandardErrorPath</key>
-    <string>{{HOME}}/.karmada/logs/karmada-scheduler.error</string>
+    <string>{{LOG_DIR}}/karmada-scheduler.error</string>
     <key>StandardOutPath</key>
-    <string>{{HOME}}/.karmada/logs/karmada-scheduler.log</string>
+    <string>{{LOG_DIR}}/karmada-scheduler.log</string>
 </dict>
 </plist>

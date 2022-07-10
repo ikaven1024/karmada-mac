@@ -6,12 +6,12 @@
         <string>com.github.karmada-io.karmada-webhook</string>
         <key>ProgramArguments</key>
         <array>
-            <string>{{HOME}}/bin/karmada-webhook</string>
-            <string>--kubeconfig={{HOME}}/.karmada/karmada-apiserver.config</string>
+            <string>{{BIN_DIR}}/karmada-webhook</string>
+            <string>--kubeconfig={{KARMADA_KUBECONFIG}}</string>
             <string>--bind-address=0.0.0.0</string>
-            <string>--secure-port=8443</string>
+            <string>--secure-port={{KARMADA_WEBHOOK_SECURE_PORT}}</string>
             <string>--metrics-bind-address=0</string>
-            <string>--cert-dir=/{{HOME}}/.karmada</string>
+            <string>--cert-dir={{KARMADA_DIR}}/</string>
             <string>--v=4</string>
         </array>
         <key>RunAtLoad</key>
@@ -19,8 +19,8 @@
         <key>KeepAlive</key>
         <true/>
         <key>StandardErrorPath</key>
-    <string>{{HOME}}/.karmada/logs/karmada-webhook.error</string>
+    <string>{{LOG_DIR}}/karmada-webhook.error</string>
     <key>StandardOutPath</key>
-    <string>{{HOME}}/.karmada/logs/karmada-webhook.log</string>
+    <string>{{LOG_DIR}}/karmada-webhook.log</string>
 </dict>
 </plist>
