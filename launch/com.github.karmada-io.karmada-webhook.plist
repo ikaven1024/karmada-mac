@@ -12,6 +12,8 @@
             <string>--secure-port={{KARMADA_WEBHOOK_SECURE_PORT}}</string>
             <string>--metrics-bind-address=0</string>
             <string>--cert-dir={{KARMADA_DIR}}/</string>
+            <string>--tls-cert-file-name=karmada.crt</string>
+            <string>--tls-private-key-file-name=karmada.key</string>
             <string>--v=4</string>
         </array>
         <key>RunAtLoad</key>
