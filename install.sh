@@ -12,7 +12,7 @@ source "${ROOT_DIR}/default.config"
 
 CERT_DIR=${KARMADA_DIR}
 ROOT_CA_FILE=${CERT_DIR}/server-ca.crt
-LAUNCH_DIR="${HOME}/Library/LaunchAgents"
+LAUNCH_DIR="${KARMADA_DIR}/LaunchAgents"
 CFSSL_VERSION="v1.5.0"
 
 KARMADA_APISERVER_IP=127.0.0.1
@@ -23,6 +23,7 @@ install() {
   echo ! Starting install karmada
   print_binaries_version
 
+  install_scripts
   gen_cert
   install_launch_tasks
   start
@@ -34,29 +35,23 @@ install() {
 }
 
 uninstall() {
-  echo ! Starting uninstall karmada
-  stop
-  uninstall_launch_tasks
-  clean_dir
+  "$KARMADA_DIR"/install.sh uninstall
 }
 
 start() {
-  (
-    cd "${LAUNCH_DIR}"
-    launchctl load com.github.karmada-io.*
-  )
+  "$KARMADA_DIR"/install.sh start
 }
 
 stop() {
-  (
-    cd "${LAUNCH_DIR}"
-    launchctl unload com.github.karmada-io.*
-  )
+  "$KARMADA_DIR"/install.sh stop
+}
+
+restart() {
+  "$KARMADA_DIR"/install.sh restart
 }
 
 status() {
-  echo 'NOTE: It is reported by `launchctl list`. See more about it by `man launchctl`'
-  launchctl list | grep -E "PID|com.github.karmada-io.*"
+  "$KARMADA_DIR"/install.sh status
 }
 
 help() {
@@ -74,7 +69,7 @@ EOF
 }
 
 gen_cert() {
-  if [[ ! -f "${CERT_DIR}"/front-proxy-ca-config.json ]]; then
+  if [[ ! -f "${CERT_DIR}"/karmada.key ]]; then
       echo !!! generate cert
       util::cmd_must_exist "openssl"
       util::cmd_must_exist_cfssl ${CFSSL_VERSION}
@@ -104,46 +99,36 @@ gen_cert() {
     	"127.0.0.1"
   fi
 
-  # tls for webhook
-  [[ ! -f "${CERT_DIR}"/tls.key ]] && ln -s "${CERT_DIR}"/server-ca.key "${CERT_DIR}"/tls.key
-  [[ ! -f "${CERT_DIR}"/tls.crt ]] && ln -s "${CERT_DIR}"/server-ca.crt "${CERT_DIR}"/tls.crt
-
   # write karmada api server config to kubeconfig file
   util::append_client_kubeconfig "${KARMADA_KUBECONFIG}" \
 	"${CERT_DIR}/karmada.crt" "${CERT_DIR}/karmada.key" \
 	"${KARMADA_APISERVER_IP}" "${KARMADA_APISERVER_SECURE_PORT}" \
 	karmada-apiserver
-  ${KUBECTL} config use-context karmada-apiserver
 }
 
 install_launch_tasks() {
+  mkdir -p "${LAUNCH_DIR}"
   (
     cd "${ROOT_DIR}"/launch
     for file in *.plist; do
-      if [[ ! -f "${LAUNCH_DIR}/${file}" ]]; then
-        echo !!! install launch task: "${file}"
-        # shellcheck disable=SC2002
-        cat "${file}" \
-            | sed "s|{{BIN_DIR}}|${BIN_DIR}|g" \
-            | sed "s|{{LOG_DIR}}|${LOG_DIR}|g" \
-            | sed "s|{{KARMADA_DIR}}|${KARMADA_DIR}|g" \
-            | sed "s|{{KARMADA_KUBECONFIG}}|${KARMADA_KUBECONFIG}|g" \
-            | sed "s|{{ETCD_PORT}}|${ETCD_PORT}|g" \
-            | sed "s|{{ETCD_PEER_PORT}}|${ETCD_PEER_PORT}|g" \
-            | sed "s|{{KARMADA_APISERVER_SECURE_PORT}}|${KARMADA_APISERVER_SECURE_PORT}|g" \
-            | sed "s|{{KARMADA_AGGREGATED_APISERVER_SECURE_PORT}}|${KARMADA_AGGREGATED_APISERVER_SECURE_PORT}|g" \
-            | sed "s|{{KARMADA_SEARCH_SECURE_PORT}}|${KARMADA_SEARCH_SECURE_PORT}|g" \
-            | sed "s|{{KARMADA_WEBHOOK_SECURE_PORT}}|${KARMADA_WEBHOOK_SECURE_PORT}|g" \
-            | sed "s|{{KARMADA_SCHEDULER_SECURE_PORT}}|${KARMADA_SCHEDULER_SECURE_PORT}|g" \
-            | sed "s|{{KARMADA_CONTROLLER_MANAGER_SECURE_PORT}}|${KARMADA_CONTROLLER_MANAGER_SECURE_PORT}|g" \
-            > "${LAUNCH_DIR}/${file}"
-      fi
+      echo !!! install launch task: "${file}"
+      # shellcheck disable=SC2002
+      cat "${file}" \
+          | sed "s|{{BIN_DIR}}|${BIN_DIR}|g" \
+          | sed "s|{{LOG_DIR}}|${LOG_DIR}|g" \
+          | sed "s|{{KARMADA_DIR}}|${KARMADA_DIR}|g" \
+          | sed "s|{{KARMADA_KUBECONFIG}}|${KARMADA_KUBECONFIG}|g" \
+          | sed "s|{{ETCD_PORT}}|${ETCD_PORT}|g" \
+          | sed "s|{{ETCD_PEER_PORT}}|${ETCD_PEER_PORT}|g" \
+          | sed "s|{{KARMADA_APISERVER_SECURE_PORT}}|${KARMADA_APISERVER_SECURE_PORT}|g" \
+          | sed "s|{{KARMADA_AGGREGATED_APISERVER_SECURE_PORT}}|${KARMADA_AGGREGATED_APISERVER_SECURE_PORT}|g" \
+          | sed "s|{{KARMADA_SEARCH_SECURE_PORT}}|${KARMADA_SEARCH_SECURE_PORT}|g" \
+          | sed "s|{{KARMADA_WEBHOOK_SECURE_PORT}}|${KARMADA_WEBHOOK_SECURE_PORT}|g" \
+          | sed "s|{{KARMADA_SCHEDULER_SECURE_PORT}}|${KARMADA_SCHEDULER_SECURE_PORT}|g" \
+          | sed "s|{{KARMADA_CONTROLLER_MANAGER_SECURE_PORT}}|${KARMADA_CONTROLLER_MANAGER_SECURE_PORT}|g" \
+          > "${LAUNCH_DIR}/${file}"
     done
   )
-}
-
-uninstall_launch_tasks() {
-  rm -rf "${LAUNCH_DIR}"/com.github.karmada-io.*.plist
 }
 
 install_kube_artifacts() {
@@ -160,10 +145,10 @@ install_kube_artifacts() {
   tmp_crds=$(mktemp -d)
   cp -rf "${ROOT_DIR}"/crds/* "${tmp_crds}"
   fill_caBundle "${ROOT_DIR}/crds/patches/webhook_in_resourcebindings.yaml" \
-              > "${tmp_crds}/patches/webhook_in_resourcebindings.yaml"
+                   > "${tmp_crds}/patches/webhook_in_resourcebindings.yaml"
   fill_caBundle "${ROOT_DIR}/crds/patches/webhook_in_clusterresourcebindings.yaml" \
-              > "${tmp_crds}/patches/webhook_in_clusterresourcebindings.yaml"
-  ${KUBECTL} kustomize "${tmp_crds}" | ${KUBECTL} apply -f -
+                   > "${tmp_crds}/patches/webhook_in_clusterresourcebindings.yaml"
+  ${KUBECTL} apply -k "${tmp_crds}"
   rm -rf "${tmp_crds}"
 
   # deploy webhook configuration
@@ -184,6 +169,10 @@ install_kube_artifacts() {
   ${KUBECTL} apply -f "${ROOT_DIR}/artifacts/cluster-proxy-admin-rbac.yaml"
 }
 
+install_scripts() {
+  cp "$ROOT_DIR"/scripts/* "${KARMADA_DIR}"
+}
+
 print_binaries_version() {
   echo Install karmada with:
   "${BIN_DIR}"/etcd --version | grep etcd
@@ -198,22 +187,23 @@ print_binaries_version() {
   #  "${BIN_DIR}"/karmada-scheduler-estimator version
 }
 
-function print_success() {
-  echo "=========================================================="
-  echo "Local Karmada is running."
-  echo -e "\nTo start using your karmada, run:"
-  echo -e "  export KUBECONFIG=${KARMADA_KUBECONFIG}"
-}
+print_success() {
+  cat <<EOF
+==========================================================
+Local Karmada is running.
 
-clean_dir() {
-  echo !!! clean dir
-  echo clean these dir manually:
-  echo "        rm -rf $KARMADA_DIR $LOG_DIR"
+To start using your karmada, run:
+     ${KUBECTL} get clusters
+Or
+     export KUBECONFIG=${KARMADA_KUBECONFIG}
+     kubectl config use-context karmada-apiserver
+     kubectl get clusters
+EOF
 }
 
 cmd=${1:-help}
 case $cmd in
-install|uninstall|start|stop|status|help)
+install|uninstall|start|stop|restart|status|help)
   $cmd
   ;;
 *)
