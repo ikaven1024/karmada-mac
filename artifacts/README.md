@@ -1,1 +1,1 @@
-These files are lifted from https://github.com/karmada-io/karmada/tree/master/artifacts/deploy.
+These files are synced from https://github.com/karmada-io/karmada/tree/master/artifacts/deploy.

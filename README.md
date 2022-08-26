@@ -65,7 +65,7 @@ vi config
 
 Run this script to install Karmada.
 ```shell
-./run.sh install
+./install.sh install
 ```
 
 When completed, Karmada is ready. You can access Karmada by
@@ -83,7 +83,7 @@ kubectl version -o yaml
 
 See the usage by
 ```shell
-./run.sh help
+./install.sh help
 ```
 
 ## License
