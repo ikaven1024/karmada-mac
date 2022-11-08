@@ -23,8 +23,8 @@ install() {
   echo ! Starting install karmada
   print_binaries_version
 
-  install_scripts
   gen_cert
+  install_scripts
   install_launch_tasks
   start
 
@@ -104,6 +104,9 @@ gen_cert() {
 	"${CERT_DIR}/karmada.crt" "${CERT_DIR}/karmada.key" \
 	"${KARMADA_APISERVER_IP}" "${KARMADA_APISERVER_SECURE_PORT}" \
 	karmada-apiserver
+
+  # must set current-context correctly, or kubernetes & karmada components can't connect to kube-apiserver
+	kubectl --kubeconfig "${KARMADA_KUBECONFIG}" config use-context karmada-apiserver
 }
 
 install_launch_tasks() {
@@ -170,6 +173,11 @@ install_kube_artifacts() {
 }
 
 install_scripts() {
+  cp "$ROOT_DIR/default.config" "${KARMADA_DIR}"
+  if [ -f "$ROOT_DIR/config" ]
+  then
+    cp "$ROOT_DIR/config" "${KARMADA_DIR}"
+  fi
   cp "$ROOT_DIR"/scripts/* "${KARMADA_DIR}"
 }
 
@@ -196,7 +204,6 @@ To start using your karmada, run:
      ${KUBECTL} get clusters
 Or
      export KUBECONFIG=${KARMADA_KUBECONFIG}
-     kubectl config use-context karmada-apiserver
      kubectl get clusters
 EOF
 }

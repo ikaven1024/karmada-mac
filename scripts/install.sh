@@ -46,27 +46,41 @@ status() {
   launchctl list | grep -E "PID|com.github.karmada-io.*"
 }
 
+health() {
+  "${ROOT_DIR}/health_check.sh"
+}
+
 uninstall() {
   echo ! Starting uninstall karmada
 
-  echo !!! stop karmad
+  disable
+
+  echo !!! stop karmada
   stop
 
-  rm -rf "${ROOT_DIR}"/LaunchAgents/com.github.karmada-io.*.plist
-
-  # clean dir
-  echo !!! clean dir
-  echo clean these dir manually:
-  echo "        rm -rf $ROOT_DIR"
+  # It's safe to unlink(delete) file while being used in unix systems.
+  rm -rf "${ROOT_DIR}"
 }
 
 help() {
-  cat HELP
+  echo "
+Usage: $0 <COMMAND>
+
+Commands:
+enable    : Start the karmada when operating system start up.
+disable   : Don't start the karmada when operating system start up.
+start     : Run the karmada.
+stop      : Stop the karmada.
+restart   : Restart the karmada.
+status    : Show the status of processes by launchctl. It's better to use \"health\" command
+health    : Check health of all processes.
+uninstall : Stop the karmada, and remove everything left.
+help      : Print the usage of this script."
 }
 
 cmd=${1:-help}
 case $cmd in
-enable|disable|start|stop|restart|status|uninstall|help)
+enable|disable|start|stop|restart|status|health|uninstall|help)
   $cmd
   ;;
 *)
