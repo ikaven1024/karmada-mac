@@ -20,10 +20,11 @@
         <string>--kubeconfig={{KARMADA_KUBECONFIG}}</string>
         <string>--leader-elect=true</string>
         <string>--node-cidr-mask-size=24</string>
-        <string>--port=0</string>
         <string>--root-ca-file={{KARMADA_DIR}}/server-ca.crt</string>
         <string>--service-account-private-key-file={{KARMADA_DIR}}/karmada.key</string>
         <string>--service-cluster-ip-range=10.96.0.0/12</string>
+        <string>--tls-cert-file={{KARMADA_DIR}}/karmada.crt</string>
+        <string>--tls-private-key-file={{KARMADA_DIR}}/karmada.key</string>
         <string>--use-service-account-credentials=true</string>
         <string>--v=4</string>
     </array>
