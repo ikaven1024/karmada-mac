@@ -96,7 +96,7 @@ vi config
 
 Run this script to install Karmada.
 ```shell
-./install.sh install
+./ctrl.sh install
 ```
 
 This script will fail if some dependency is not installed, you need to install them yourself.
@@ -119,7 +119,7 @@ kubectl version -o yaml
 
 See the usage by
 ```shell
-./install.sh help
+./ctrl.sh help
 ```
 
 You may want to run `health_check.sh` to check if your karmada cluster is up and running. The health check logic inside installation process is pretty loose.
