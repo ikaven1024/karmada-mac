@@ -35,23 +35,23 @@ install() {
 }
 
 uninstall() {
-  "$KARMADA_DIR"/install.sh uninstall
+  "$KARMADA_DIR"/ctrl.sh uninstall
 }
 
 start() {
-  "$KARMADA_DIR"/install.sh start
+  "$KARMADA_DIR"/ctrl.sh start
 }
 
 stop() {
-  "$KARMADA_DIR"/install.sh stop
+  "$KARMADA_DIR"/ctrl.sh stop
 }
 
 restart() {
-  "$KARMADA_DIR"/install.sh restart
+  "$KARMADA_DIR"/ctrl.sh restart
 }
 
 status() {
-  "$KARMADA_DIR"/install.sh status
+  "$KARMADA_DIR"/ctrl.sh status
 }
 
 help() {
