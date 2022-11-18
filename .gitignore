@@ -6,3 +6,6 @@
 
 # custom config
 /config
+/etcd
+/kubernetes
+/karmada

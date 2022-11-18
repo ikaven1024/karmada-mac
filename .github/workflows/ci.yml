@@ -1,0 +1,22 @@
+name: CI Workflow
+on:
+  # Run this workflow every time a new commit pushed to upstream/fork repository.
+  # Run workflow on fork repository will help contributors find and resolve issues before sending a PR.
+  push:
+  pull_request:
+jobs:
+  e2e:
+    name: e2e test
+    runs-on: macos-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+      - name: install Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.3
+      - name: update bash
+        # kubernetes script requires a minimum bash version of 4.2
+        run: brew install bash
+      - name: run e2e
+        run: bash -x test/test-e2e.sh

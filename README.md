@@ -59,7 +59,7 @@ mv _output/bin/darwin/<architecture>/* ~/bin/
 git clone -b release-1.23 https://github.com/kubernetes/kubernetes.git
 cd kubernetes
 make kube-apiserver kube-controller-manager
-cp _out/bin/{kube-apiserver,kube-controller-manager} ~/bin/
+cp _output/bin/{kube-apiserver,kube-controller-manager} ~/bin/
 ```
 
 ### Trouble Shooting
