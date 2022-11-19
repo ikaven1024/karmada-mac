@@ -6,7 +6,7 @@ on:
   pull_request:
 jobs:
   e2e:
-    name: e2e test
+    name: test
     runs-on: macos-latest
     steps:
       - name: checkout code
@@ -18,5 +18,5 @@ jobs:
       - name: update bash
         # kubernetes script requires a minimum bash version of 4.2
         run: brew install bash
-      - name: run e2e
-        run: bash -x test/test-e2e.sh
+      - name: setup karmada
+        run: make

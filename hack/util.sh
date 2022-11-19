@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 
-# This file is lifted from https://github.com/karmada-io/karmada/blob/master/hack/util.sh.
+REPO_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
+
+if [[ -f "${REPO_ROOT}/default.config" ]]; then
+  source "${REPO_ROOT}/default.config"
+fi
+
+if [[ -f "${REPO_ROOT}/config" ]]; then
+  source "${REPO_ROOT}/config"
+fi
 
 # util::cmd_must_exist check whether command is installed.
 function util::cmd_must_exist {
@@ -101,7 +109,7 @@ function util::install_tools() {
 util::wait_until() {
   cmd="$*"
   echo waiting: "$cmd"
-  for i in {1..10}; do
+  for i in {1..60}; do
     if eval "$cmd" > /dev/null; then
       return 0
     fi
