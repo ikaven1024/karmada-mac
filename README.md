@@ -58,6 +58,16 @@ More usage see
 ~/.karmada/ctrl.sh help
 ```
 
+## Deploy member clusters
+
+You can deploy member clusters with [`kwok`](https://github.com/kubernetes-sigs/kwok) with `binary` runtime. 
+
+Download `kwok` and `kwokctl` from [Release](https://github.com/kubernetes-sigs/kwok/releases) and install them to `~/bin`, then 
+
+```shell
+kwokctl create cluster --name member1 --runtime=binary --kube-apiserver-binary ~/bin/kube-apiserver --kube-controller-manager-binary ~/bin/kube-controller-manager --kube-scheduler-binary ~/bin/kube-scheduler --etcd-binary ~/bin/etcd  --kwok-controller-binary ~/bin/kwok
+```
+
 # License
 
 Karmada-mac is under the Apache 2.0 license. See the [LICENSE](LICENSE) file for details.

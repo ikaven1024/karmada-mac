@@ -19,7 +19,8 @@ trap "cleanup" EXIT SIGINT
 echo "Install Kubernetes from ${KUBE_REPO} ${KUBE_BRANCH}"
 git clone -b "${KUBE_BRANCH}" "${KUBE_REPO}" "${repo_dir}"
 cd "${repo_dir}"
-make kube-apiserver kube-controller-manager kubectl
+# kube-scheduler is used in kwok
+make kube-apiserver kube-controller-manager kube-scheduler kubectl
 
 mkdir -p "${BIN_DIR}"
-mv _output/bin/{kube-apiserver,kube-controller-manager,kubectl} "${BIN_DIR}"
+mv _output/bin/{kube-apiserver,kube-controller-manager,kube-scheduler,kubectl} "${BIN_DIR}"
