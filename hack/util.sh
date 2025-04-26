@@ -10,6 +10,15 @@ if [[ -f "${REPO_ROOT}/config" ]]; then
   source "${REPO_ROOT}/config"
 fi
 
+# the kubeconfig path for karmada
+KARMADA_KUBECONFIG="${KARMADA_DIR}/karmada-apiserver.config"
+# dir to place etcd, k8s, karmada binaries
+KARMADA_BIN="${KARMADA_DIR}/bin"
+# cert directory
+CERT_DIR="${KARMADA_DIR}/certs"
+# log directory
+LOG_DIR="${KARMADA_DIR}/logs"
+
 # util::cmd_must_exist check whether command is installed.
 function util::cmd_must_exist {
     local CMD=$(command -v ${1})

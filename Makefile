@@ -1,7 +1,7 @@
 all:
 	hack/before-install.sh
 	@$(MAKE) install-etcd-bin install-k8s-bin install-karmada-bin
-	@$(MAKE) install-certs install-scripts install-karmada
+	@$(MAKE) install-scripts install-certs install-servers install-karmada
 	hack/post-install.sh
 
 install-etcd-bin:
@@ -19,11 +19,11 @@ install-certs:
 install-scripts:
 	hack/install-scripts.sh
 
+install-servers:
+	hack/install-servers.sh
+
 install-karmada:
 	hack/install-karmada.sh
-
-enable disable start stop restart status health uninstall help:
-	hack/ctrl.sh $@
 
 check:
 	hack/check.sh

@@ -7,49 +7,39 @@ set -o pipefail
 REPO_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
 source "${REPO_ROOT}/hack/util.sh"
 
-CERT_DIR=${KARMADA_DIR}
-ROOT_CA_FILE=${CERT_DIR}/server-ca.crt
+DEPLOY_DIR="${KARMADA_DIR}/artifacts/deploy"
+CRD_DIRS="${KARMADA_DIR}/artifacts/crds"
 KUBECTL="${KARMADA_BIN}/kubectl --kubeconfig=${KARMADA_KUBECONFIG} --context karmada-apiserver"
 
-"${REPO_ROOT}"/hack/ctrl.sh start
-util::wait_until ${KUBECTL} version -o yaml > /dev/null
-
 echo "Install artifacts"
-ca_string=$(base64 < "${ROOT_CA_FILE}" | tr "\n" " "|sed s/[[:space:]]//g)
-fill_caBundle() {
-  sed "s/{{caBundle}}/${ca_string}/g" < "$1"
+mkdir -p "${DEPLOY_DIR}" "${CRD_DIRS}"
+cp "${KARMADA_REPO_DIR}/artifacts/deploy/namespace.yaml" \
+   "${KARMADA_REPO_DIR}/artifacts/deploy/webhook-configuration.yaml" \
+   "${KARMADA_REPO_DIR}/artifacts/deploy/karmada-aggregated-apiserver-apiservice.yaml" \
+   "${KARMADA_REPO_DIR}/artifacts/deploy/karmada-search-apiservice.yaml" \
+   "${KARMADA_REPO_DIR}/artifacts/deploy/admin-clusterrole-aggregation.yaml" \
+   "${KARMADA_REPO_DIR}/artifacts/deploy/cluster-proxy-admin-rbac.yaml" \
+   "${DEPLOY_DIR}"
+cp -rf "${KARMADA_REPO_DIR}"/charts/karmada/_crds/* "${CRD_DIRS}"
+
+ca_string=$(base64 < "${CERT_DIR}/server-ca.crt" | tr "\n" " "|sed s/[[:space:]]//g)
+sed -i '' "s/{{caBundle}}/${ca_string}/g" "${CRD_DIRS}"/patches/*.yaml "${DEPLOY_DIR}"/*.yaml
+
+sed -i '' -e "s|{{name}}.{{namespace}}.svc:443|localhost:${KARMADA_WEBHOOK_SECURE_PORT}|g" \
+          "${CRD_DIRS}/patches/webhook_in_clusterresourcebindings.yaml"
+sed -i '' -e "s|{{name}}.{{namespace}}.svc:443|localhost:${KARMADA_WEBHOOK_SECURE_PORT}|g" \
+          "${CRD_DIRS}/patches/webhook_in_resourcebindings.yaml"
+sed -i '' -e "s|karmada-webhook.karmada-system.svc:443|localhost:${KARMADA_WEBHOOK_SECURE_PORT}|g" \
+          "${DEPLOY_DIR}/webhook-configuration.yaml"
+
+modify_apiservice() {
+  yq eval -i '
+    select(.kind == "APIService").spec.service.port = '"${2}"' |
+    select(.kind == "Service").spec.externalName = "localhost"
+  ' "$1"
 }
+modify_apiservice "${DEPLOY_DIR}/karmada-aggregated-apiserver-apiservice.yaml" "${KARMADA_AGGREGATED_APISERVER_SECURE_PORT}"
+modify_apiservice "${DEPLOY_DIR}/karmada-search-apiservice.yaml"               "${KARMADA_SEARCH_SECURE_PORT}"
 
-# create namespace for control plane components
-${KUBECTL} apply -f "${REPO_ROOT}/artifacts/namespace.yaml"
-
-# deploy crds
-tmp_crds=$(mktemp -d)
-cleanup() {
-  rm -rf "${tmp_crds}"
-}
-trap "cleanup" EXIT SIGINT
-
-cp -rf "${REPO_ROOT}"/crds/* "${tmp_crds}"
-fill_caBundle "${REPO_ROOT}/crds/patches/webhook_in_resourcebindings.yaml" \
-                 > "${tmp_crds}/patches/webhook_in_resourcebindings.yaml"
-fill_caBundle "${REPO_ROOT}/crds/patches/webhook_in_clusterresourcebindings.yaml" \
-                 > "${tmp_crds}/patches/webhook_in_clusterresourcebindings.yaml"
-${KUBECTL} apply -k "${tmp_crds}"
-
-# deploy webhook configuration
-fill_caBundle "${REPO_ROOT}/artifacts/webhook-configuration.yaml" | ${KUBECTL} apply -f -
-
-# deploy APIService on karmada apiserver for karmada-aggregated-apiserver
-sed "s/{{KARMADA_AGGREGATED_APISERVER_SECURE_PORT}}/${KARMADA_AGGREGATED_APISERVER_SECURE_PORT}/g" \
-      "${REPO_ROOT}/artifacts/karmada-aggregated-apiserver-apiservice.yaml" \
-      | ${KUBECTL} apply -f -
-
-# deploy APIService on karmada apiserver for karmada-search
-# shellcheck disable=SC2002
-sed "s/{{KARMADA_SEARCH_SECURE_PORT}}/${KARMADA_SEARCH_SECURE_PORT}/g" \
-      "${REPO_ROOT}/artifacts/karmada-search-apiservice.yaml" \
-      | ${KUBECTL} apply -f -
-
-# deploy cluster proxy rbac for admin
-${KUBECTL} apply -f "${REPO_ROOT}/artifacts/cluster-proxy-admin-rbac.yaml"
+${KUBECTL} apply -f "${DEPLOY_DIR}"
+${KUBECTL} apply -k "${CRD_DIRS}"

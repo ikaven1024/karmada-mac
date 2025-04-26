@@ -19,6 +19,6 @@ fi
 cd "${repo_dir}"
 make kube-apiserver kube-controller-manager kube-scheduler kubectl
 
+echo "Install to ${KARMADA_BIN}"
 mkdir -p "${KARMADA_BIN}"
 cp _output/bin/{kube-apiserver,kube-controller-manager,kube-scheduler,kubectl} "${KARMADA_BIN}"
-cp _output/bin/kubectl "${BIN_DIR}"

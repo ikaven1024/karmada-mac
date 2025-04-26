@@ -1,20 +1,7 @@
 #!/usr/bin/env bash
 
 # This directory for store data, e.g. cert files
-KARMADA_DIR="${HOME}/.karmada2"
-
-# the kubeconfig path for karmada
-KARMADA_KUBECONFIG="${KARMADA_DIR}/karmada-apiserver.config"
-
-# dir to place etcd, k8s, karmada binaries
-KARMADA_BIN="${KARMADA_DIR}/bin"
-# dir to place karmadactl
-BIN_DIR="${HOME}/bin"
-
-# cert directory
-CERT_DIR="${KARMADA_DIR}/certs"
-# log directory
-LOG_DIR="${KARMADA_DIR}/logs"
+KARMADA_DIR="${HOME}/.karmada"
 
 # Etcd binaries will be install from:
 # 1. ETCD_DOWNLOAD_URL if set
@@ -22,21 +9,21 @@ LOG_DIR="${KARMADA_DIR}/logs"
 # 3. ETCD_REPO
 ETCD_VERSION=v3.5.16
 ETCD_DOWNLOAD_URL="https://github.com/etcd-io/etcd/releases/download/${ETCD_VERSION}/etcd-${ETCD_VERSION}-darwin-$(uname -m).zip"
-ETCD_REPO_DIR=
+ETCD_REPO_DIR=${KARMADA_DIR}/repos/etcd-${ETCD_VERSION}
 ETCD_REPO=https://github.com/etcd-io/etcd.git
 
 # Kubernetes binaries will be install from:
 # 1. KUBE_REPO_DIR if exist
 # 2. KUBE_REPO
 KUBE_VERSION=v1.31.3
-KUBE_REPO_DIR=
+KUBE_REPO_DIR==${KARMADA_DIR}/repos/kubernetes-${KUBE_VERSION}
 KUBE_REPO=https://github.com/kubernetes/kubernetes.git
 
 # Karmada binaries will be install from:
 # 1. KARMADA_REPO_DIR if exist
 # 2. KARMADA_REPO
 KARMADA_VERSION=v1.13.1
-KARMADA_REPO_DIR=
+KARMADA_REPO_DIR=${KARMADA_DIR}/repos/karmada-${KARMADA_VERSION}
 KARMADA_REPO=https://github.com/karmada-io/karmada
 
 # ports definitions
@@ -48,3 +35,5 @@ KARMADA_SEARCH_SECURE_PORT=7443
 KARMADA_WEBHOOK_SECURE_PORT=8443
 KARMADA_SCHEDULER_SECURE_PORT=10351
 KARMADA_CONTROLLER_MANAGER_SECURE_PORT=10357
+# metrics port is incrementally assigned from PORT_START
+PORT_START=50000

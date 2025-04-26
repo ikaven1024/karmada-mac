@@ -10,12 +10,12 @@ source "${REPO_ROOT}/hack/util.sh"
 # waiting healthy
 for i in {1..60}; do
   echo "Waiting karmada ready..."
-  if "${REPO_ROOT}"/hack/check.sh > /dev/null 2>&1; then
+  if "${KARMADA_DIR}/health_check.sh" > /dev/null 2>&1; then
     break
   fi
   sleep 1
 done
-"${REPO_ROOT}"/hack/check.sh;
+"${KARMADA_DIR}/health_check.sh"
 
 # install successfully
 cat <<EOF
@@ -23,8 +23,8 @@ cat <<EOF
 Local Karmada is running.
 
 To start using your karmada, run:
-     "${KARMADA_BIN}/kubectl" --kubeconfig "${KARMADA_KUBECONFIG}" get clusters
+     ${KARMADA_BIN}/kubectl --kubeconfig ${KARMADA_KUBECONFIG} get clusters
 Or
      export KUBECONFIG=${KARMADA_KUBECONFIG}
-     "${BIN_DIR}/kubectl" get clusters
+     ${KARMADA_DIR}/bin/kubectl get clusters
 EOF

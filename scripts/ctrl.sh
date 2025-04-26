@@ -18,6 +18,7 @@ enable() {
 }
 
 disable() {
+  # launchctl disable gui/${UID}/com.github.karmada-io.karmada-etcd.plist
   rm -rf ~/Library/LaunchAgents/com.github.karmada-io.*.plist
 }
 

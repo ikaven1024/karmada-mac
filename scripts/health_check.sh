@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
 ROOT_DIR=$(dirname "${BASH_SOURCE[0]}")
-source "${ROOT_DIR}/default.config"
+source "${ROOT_DIR}/config.default"
 [[ -f "${ROOT_DIR}/config" ]] && source "${ROOT_DIR}/config"
+
+CERT_DIR="${KARMADA_DIR}/certs"
 
 # Some health check url is https, some is http.
 readonly -A services_standard=(
@@ -26,10 +28,10 @@ declare -A check_results
 # https://kubernetes.io/docs/reference/using-api/health-checks/
 function health_check() {
   local http_code
-  http_code="$(curl --silent $2 --output /dev/stderr --write-out "%{http_code}" \
-    --cacert "${KARMADA_DIR}/server-ca.crt" \
-    --cert "${KARMADA_DIR}/karmada.crt" \
-    --key "${KARMADA_DIR}/karmada.key" \
+  http_code="$(curl -k --silent $2 --output /dev/stderr --write-out "%{http_code}" \
+    --cacert "${CERT_DIR}/server-ca.crt" \
+    --cert "${CERT_DIR}/karmada.crt" \
+    --key "${CERT_DIR}/karmada.key" \
     "$1")"
   test $? -eq '0' && test ${http_code} -eq '200'
   return $?
@@ -63,9 +65,9 @@ function check_one() {
 
 function check_etcd() {
   echo "###### Start check etcd"
-	etcdctl --cacert "${KARMADA_DIR}/server-ca.crt" \
-    --cert "${KARMADA_DIR}/karmada.crt" \
-    --key "${KARMADA_DIR}/karmada.key" \
+	etcdctl --cacert "${CERT_DIR}/server-ca.crt" \
+    --cert "${CERT_DIR}/karmada.crt" \
+    --key "${CERT_DIR}/karmada.key" \
     --endpoints "127.0.0.1:${ETCD_PORT}" \
     endpoint status --write-out="table"
 
@@ -95,7 +97,7 @@ function print_check_result() {
 function main() {
   check_etcd
   check_all
-  
+
   print_check_result
 
   [ ${check_pass} -eq 1 ]

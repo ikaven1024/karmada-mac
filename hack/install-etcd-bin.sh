@@ -10,13 +10,12 @@ source "${REPO_ROOT}/hack/util.sh"
 if [[ -n "${ETCD_DOWNLOAD_URL}" ]]; then
   echo "Install Etcd from ${ETCD_DOWNLOAD_URL}"
   download_dir=$(mktemp -d /tmp/XXXXXXXX)
-  cleanup() {
-    rm -rf "${download_dir}"
-  }
-  trap "cleanup" EXIT SIGINT
+  trap '{ rm -rf "${download_dir}"; }' EXIT SIGINT
 
   curl -L "${ETCD_DOWNLOAD_URL}" | tar xz -C "${download_dir}"
   chmod +x ${download_dir}/etcd-*/{etcd,etcdctl,etcdutl}
+
+  echo "Install to ${KARMADA_BIN}"
   mkdir -p "${KARMADA_BIN}"
   cp ${download_dir}/etcd-*/{etcd,etcdctl,etcdutl} ${KARMADA_BIN}
   exit
@@ -34,5 +33,6 @@ fi
 cd "${repo_dir}"
 make
 
+echo "Install to ${KARMADA_BIN}"
 mkdir -p "${KARMADA_BIN}"
 mv bin/{etcd,etcdctl,etcdutl} "${KARMADA_BIN}"

@@ -7,7 +7,6 @@ set -o pipefail
 REPO_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
 source "${REPO_ROOT}/hack/util.sh"
 
-CERT_DIR=${KARMADA_DIR}
 CFSSL_VERSION="v1.5.0"
 KARMADA_APISERVER_IP=127.0.0.1
 
@@ -45,4 +44,4 @@ util::append_client_kubeconfig "${KARMADA_KUBECONFIG}" \
       karmada-apiserver
 
 # must set current-context correctly, or kubernetes & karmada components can't connect to kube-apiserver
-kubectl --kubeconfig "${KARMADA_KUBECONFIG}" config use-context karmada-apiserver
+${KARMADA_BIN}/kubectl --kubeconfig "${KARMADA_KUBECONFIG}" config use-context karmada-apiserver
