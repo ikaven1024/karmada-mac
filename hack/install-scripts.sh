@@ -25,7 +25,7 @@ for file in "${REPO_ROOT}"/launch/*.plist; do
   echo !!! Install launch task: "${task_file}"
   # shellcheck disable=SC2002
   cat "${file}" \
-      | sed "s|{{BIN_DIR}}|${BIN_DIR}|g" \
+      | sed "s|{{KARMADA_BIN}}|${KARMADA_BIN}|g" \
       | sed "s|{{LOG_DIR}}|${LOG_DIR}|g" \
       | sed "s|{{KARMADA_DIR}}|${KARMADA_DIR}|g" \
       | sed "s|{{KARMADA_KUBECONFIG}}|${KARMADA_KUBECONFIG}|g" \

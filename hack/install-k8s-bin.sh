@@ -7,20 +7,18 @@ set -o pipefail
 REPO_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
 source "${REPO_ROOT}/hack/util.sh"
 
-KUBE_REPO=${KUBE_REPO:-https://github.com/kubernetes/kubernetes.git}
-KUBE_VERSION=${KUBE_VERSION:-v1.25.2}
+if [[ -d "${KUBE_REPO_DIR}" ]]; then
+  echo "Install Kubernetes from ${KUBE_REPO_DIR} ..."
+  repo_dir="${KUBE_REPO_DIR}"
+else
+  echo "Install Kubernetes from ${KUBE_REPO} ${KUBE_VERSION}"
+  repo_dir="${REPO_ROOT}/repos/Kubernetes-${KARMADA_VERSION}"
+  git clone --depth 1 --branch "${KUBE_VERSION}" "${KUBE_REPO}" "${repo_dir}"
+fi
 
-repo_dir=$(mktemp -u)
-cleanup() {
-  rm -rf "${repo_dir}"
-}
-trap "cleanup" EXIT SIGINT
-
-echo "Install Kubernetes from ${KUBE_REPO} ${KUBE_VERSION}"
-git clone -b "${KUBE_VERSION}" "${KUBE_REPO}" "${repo_dir}"
 cd "${repo_dir}"
-# kube-scheduler is used in kwok
 make kube-apiserver kube-controller-manager kube-scheduler kubectl
 
-mkdir -p "${BIN_DIR}"
-mv _output/bin/{kube-apiserver,kube-controller-manager,kube-scheduler,kubectl} "${BIN_DIR}"
+mkdir -p "${KARMADA_BIN}"
+cp _output/bin/{kube-apiserver,kube-controller-manager,kube-scheduler,kubectl} "${KARMADA_BIN}"
+cp _output/bin/kubectl "${BIN_DIR}"

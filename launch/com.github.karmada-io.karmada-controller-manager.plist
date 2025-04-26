@@ -6,7 +6,7 @@
     <string>com.github.karmada-io.karmada-controller-manager</string>
     <key>ProgramArguments</key>
     <array>
-        <string>{{BIN_DIR}}/karmada-controller-manager</string>
+        <string>{{KARMADA_BIN}}/karmada-controller-manager</string>
         <string>--kubeconfig={{KARMADA_KUBECONFIG}}</string>
         <string>--bind-address=0.0.0.0</string>
         <string>--cluster-status-update-frequency=10s</string>

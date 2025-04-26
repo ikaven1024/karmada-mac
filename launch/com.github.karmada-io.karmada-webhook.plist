@@ -6,7 +6,7 @@
         <string>com.github.karmada-io.karmada-webhook</string>
         <key>ProgramArguments</key>
         <array>
-            <string>{{BIN_DIR}}/karmada-webhook</string>
+            <string>{{BIKARMADA_BINN_DIR}}/karmada-webhook</string>
             <string>--kubeconfig={{KARMADA_KUBECONFIG}}</string>
             <string>--bind-address=0.0.0.0</string>
             <string>--secure-port={{KARMADA_WEBHOOK_SECURE_PORT}}</string>

@@ -6,7 +6,7 @@
     <string>com.github.karmada-io.kube-controller-manager</string>
     <key>ProgramArguments</key>
     <array>
-        <string>{{BIN_DIR}}/kube-controller-manager</string>
+        <string>{{KARMADA_BIN}}/kube-controller-manager</string>
         <string>--allocate-node-cidrs=true</string>
         <string>--authentication-kubeconfig={{KARMADA_KUBECONFIG}}</string>
         <string>--authorization-kubeconfig={{KARMADA_KUBECONFIG}}</string>

@@ -6,7 +6,7 @@
     <string>com.github.karmada-io.karmada-aggregated-apiserver</string>
     <key>ProgramArguments</key>
     <array>
-        <string>{{BIN_DIR}}/karmada-aggregated-apiserver</string>
+        <string>{{KARMADA_BIN}}/karmada-aggregated-apiserver</string>
         <string>--kubeconfig={{KARMADA_KUBECONFIG}}</string>
         <string>--authentication-kubeconfig={{KARMADA_KUBECONFIG}}</string>
         <string>--authorization-kubeconfig={{KARMADA_KUBECONFIG}}</string>

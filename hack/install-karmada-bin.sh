@@ -7,19 +7,18 @@ set -o pipefail
 REPO_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
 source "${REPO_ROOT}/hack/util.sh"
 
-KARMADA_REPO=${KARMADA_REPO:-https://github.com/karmada-io/karmada}
-KARMADA_VERSION=${KARMADA_VERSION:-v1.4.0}
+if [[ -d "${KARMADA_REPO_DIR}" ]]; then
+  echo "Install Karmada from ${KARMADA_REPO_DIR} ..."
+  repo_dir="${KARMADA_REPO_DIR}"
+else
+  echo "Install Karmada from ${KARMADA_REPO} ${KARMADA_VERSION}"
+  repo_dir="${REPO_ROOT}/repos/karmada-${KARMADA_VERSION}"
+  git clone --depth 1 --branch "${KARMADA_VERSION}" "${KARMADA_REPO}" repo_dir
+fi
 
-repo_dir=$(mktemp -u)
-cleanup() {
-  rm -rf "${repo_dir}"
-}
-trap "cleanup" EXIT SIGINT
-
-echo "Install Karmada from ${KARMADA_REPO} ${KARMADA_VERSION}"
-git clone -b "${KARMADA_VERSION}" "${KARMADA_REPO}" "${repo_dir}"
 cd "${repo_dir}"
 make all
 
-mkdir -p "${BIN_DIR}"
-mv _output/bin/*/*/* "${BIN_DIR}"
+mkdir -p "${KARMADA_BIN}"
+cp _output/bin/*/*/* "${KARMADA_BIN}"
+cp _output/bin/*/*/{karmadactl,kubectl-karmada} "${BIN_DIR}"

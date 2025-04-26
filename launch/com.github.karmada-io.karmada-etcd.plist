@@ -6,7 +6,7 @@
     <string>com.github.karmada-io.karmada-etcd</string>
     <key>ProgramArguments</key>
     <array>
-        <string>{{BIN_DIR}}/etcd</string>
+        <string>{{KARMADA_BIN}}/etcd</string>
         <string>--name=etcd0</string>
         <string>--listen-peer-urls=http://0.0.0.0:{{ETCD_PEER_PORT}}</string>
         <string>--listen-client-urls=https://0.0.0.0:{{ETCD_PORT}}</string>

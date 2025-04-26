@@ -6,7 +6,7 @@
     <string>com.github.karmada-io.karmada-search</string>
     <key>ProgramArguments</key>
     <array>
-        <string>{{BIN_DIR}}/karmada-search</string>
+        <string>{{KARMADA_BIN}}/karmada-search</string>
         <string>--secure-port={{KARMADA_SEARCH_SECURE_PORT}}</string>
         <string>--kubeconfig={{KARMADA_KUBECONFIG}}</string>
         <string>--authentication-kubeconfig={{KARMADA_KUBECONFIG}}</string>

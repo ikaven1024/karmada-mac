@@ -6,7 +6,7 @@
     <string>com.github.karmada-io.karmada-apiserver</string>
     <key>ProgramArguments</key>
     <array>
-        <string>{{BIN_DIR}}/kube-apiserver</string>
+        <string>{{KARMADA_BIN}}/kube-apiserver</string>
         <string>--allow-privileged=true</string>
         <string>--authorization-mode=Node,RBAC</string>
         <string>--client-ca-file={{KARMADA_DIR}}/server-ca.crt</string>

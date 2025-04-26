@@ -23,7 +23,7 @@ cat <<EOF
 Local Karmada is running.
 
 To start using your karmada, run:
-     "${BIN_DIR}/kubectl" --kubeconfig "${KARMADA_KUBECONFIG}" get clusters
+     "${KARMADA_BIN}/kubectl" --kubeconfig "${KARMADA_KUBECONFIG}" get clusters
 Or
      export KUBECONFIG=${KARMADA_KUBECONFIG}
      "${BIN_DIR}/kubectl" get clusters

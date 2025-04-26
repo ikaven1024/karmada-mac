@@ -9,7 +9,7 @@ source "${REPO_ROOT}/hack/util.sh"
 
 CERT_DIR=${KARMADA_DIR}
 ROOT_CA_FILE=${CERT_DIR}/server-ca.crt
-KUBECTL="${BIN_DIR}/kubectl --kubeconfig=${KARMADA_KUBECONFIG} --context karmada-apiserver"
+KUBECTL="${KARMADA_BIN}/kubectl --kubeconfig=${KARMADA_KUBECONFIG} --context karmada-apiserver"
 
 "${REPO_ROOT}"/hack/ctrl.sh start
 util::wait_until ${KUBECTL} version -o yaml > /dev/null

@@ -2,8 +2,8 @@
 
 REPO_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
 
-if [[ -f "${REPO_ROOT}/default.config" ]]; then
-  source "${REPO_ROOT}/default.config"
+if [[ -f "${REPO_ROOT}/config.default" ]]; then
+  source "${REPO_ROOT}/config.default"
 fi
 
 if [[ -f "${REPO_ROOT}/config" ]]; then

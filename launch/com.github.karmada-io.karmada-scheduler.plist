@@ -6,7 +6,7 @@
     <string>com.github.karmada-io.karmada-scheduler</string>
     <key>ProgramArguments</key>
     <array>
-        <string>{{BIN_DIR}}/karmada-scheduler</string>
+        <string>{{KARMADA_BIN}}/karmada-scheduler</string>
         <string>--kubeconfig={{KARMADA_KUBECONFIG}}</string>
         <string>--bind-address=0.0.0.0</string>
         <string>--secure-port={{KARMADA_SCHEDULER_SECURE_PORT}}</string>

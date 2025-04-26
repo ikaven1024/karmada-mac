@@ -6,7 +6,7 @@
     <string>com.github.karmada-io.karmada-descheduler</string>
     <key>ProgramArguments</key>
     <array>
-        <string>{{BIN_DIR}}/karmada-descheduler</string>
+        <string>{{KARMADA_BIN}}/karmada-descheduler</string>
         <string>--kubeconfig={{KARMADA_KUBECONFIG}}</string>
         <string>--bind-address=0.0.0.0</string>
         <string>--v=4</string>
