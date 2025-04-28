@@ -23,14 +23,12 @@ fi
 
 if [[ -d "${ETCD_REPO_DIR}" ]]; then
   echo "Install Etcd from ${ETCD_REPO_DIR}"
-  repo_dir="${ETCD_REPO_DIR}"
 else
-  echo "Install Etcd from ${ETCD_REPO} ${ETCD_VERSION}"
-  repo_dir="${REPO_ROOT}/repos/etcd-${ETCD_VERSION}"
-  git clone --depth 1 --branch "${ETCD_VERSION}" "${ETCD_REPO}" "${repo_dir}"
+  echo "Install Etcd from ${ETCD_REPO} ${ETCD_VERSION}"\
+  git clone --depth 1 --branch "${ETCD_VERSION}" "${ETCD_REPO}" "${ETCD_REPO_DIR}"
 fi
 
-cd "${repo_dir}"
+cd "${ETCD_REPO_DIR}"
 make
 
 echo "Install to ${KARMADA_BIN}"

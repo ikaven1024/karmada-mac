@@ -9,14 +9,12 @@ source "${REPO_ROOT}/hack/util.sh"
 
 if [[ -d "${KUBE_REPO_DIR}" ]]; then
   echo "Install Kubernetes from ${KUBE_REPO_DIR} ..."
-  repo_dir="${KUBE_REPO_DIR}"
 else
   echo "Install Kubernetes from ${KUBE_REPO} ${KUBE_VERSION}"
-  repo_dir="${REPO_ROOT}/repos/Kubernetes-${KARMADA_VERSION}"
-  git clone --depth 1 --branch "${KUBE_VERSION}" "${KUBE_REPO}" "${repo_dir}"
+  git clone --depth 1 --branch "${KUBE_VERSION}" "${KUBE_REPO}" "${KUBE_REPO_DIR}"
 fi
 
-cd "${repo_dir}"
+cd "${KUBE_REPO_DIR}"
 make kube-apiserver kube-controller-manager kube-scheduler kubectl
 
 echo "Install to ${KARMADA_BIN}"

@@ -18,5 +18,7 @@ jobs:
       - name: update bash
         # kubernetes script requires a minimum bash version of 4.2
         run: brew install bash
+      - name: install yq
+        run: brew install yq
       - name: setup karmada
         run: make

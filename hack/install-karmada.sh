@@ -41,5 +41,6 @@ modify_apiservice() {
 modify_apiservice "${DEPLOY_DIR}/karmada-aggregated-apiserver-apiservice.yaml" "${KARMADA_AGGREGATED_APISERVER_SECURE_PORT}"
 modify_apiservice "${DEPLOY_DIR}/karmada-search-apiservice.yaml"               "${KARMADA_SEARCH_SECURE_PORT}"
 
+${KUBECTL} apply -f "${DEPLOY_DIR}/namespace.yaml"
 ${KUBECTL} apply -f "${DEPLOY_DIR}"
 ${KUBECTL} apply -k "${CRD_DIRS}"

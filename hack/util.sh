@@ -97,9 +97,9 @@ function util::append_client_kubeconfig {
     local api_port=$5
     local client_id=$6
     local token=${7:-}
-    kubectl config set-cluster "${client_id}" --server=https://"${api_host}:${api_port}" --insecure-skip-tls-verify=true --kubeconfig="${kubeconfig_path}"
-    kubectl config set-credentials "${client_id}" --token="${token}" --client-certificate="${client_certificate_file}" --client-key="${client_key_file}" --embed-certs=true --kubeconfig="${kubeconfig_path}"
-    kubectl config set-context "${client_id}" --cluster="${client_id}" --user="${client_id}" --kubeconfig="${kubeconfig_path}"
+    "${KARMADA_DIR}"/bin/kubectl config set-cluster "${client_id}" --server=https://"${api_host}:${api_port}" --insecure-skip-tls-verify=true --kubeconfig="${kubeconfig_path}"
+    "${KARMADA_DIR}"/bin/kubectl config set-credentials "${client_id}" --token="${token}" --client-certificate="${client_certificate_file}" --client-key="${client_key_file}" --embed-certs=true --kubeconfig="${kubeconfig_path}"
+    "${KARMADA_DIR}"/bin/kubectl config set-context "${client_id}" --cluster="${client_id}" --user="${client_id}" --kubeconfig="${kubeconfig_path}"
 }
 
 # This function installs a Go tools by 'go install' command.
@@ -118,7 +118,7 @@ function util::install_tools() {
 util::wait_until() {
   cmd="$*"
   echo waiting: "$cmd"
-  for i in {1..60}; do
+  for i in {1..300}; do
     if eval "$cmd" > /dev/null; then
       return 0
     fi
@@ -127,5 +127,6 @@ util::wait_until() {
   done
 
   echo "$* failed"
-  return 1
+  eval "$cmd"
+  return $?
 }

@@ -65,7 +65,7 @@ function check_one() {
 
 function check_etcd() {
   echo "###### Start check etcd"
-	etcdctl --cacert "${CERT_DIR}/server-ca.crt" \
+	"${KARMADA_DIR}"/bin/etcdctl --cacert "${CERT_DIR}/server-ca.crt" \
     --cert "${CERT_DIR}/karmada.crt" \
     --key "${CERT_DIR}/karmada.key" \
     --endpoints "127.0.0.1:${ETCD_PORT}" \

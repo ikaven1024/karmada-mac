@@ -54,7 +54,7 @@ do_replace_options() {
 
 files=()
 for file in "${KARMADA_REPO_DIR}"/artifacts/deploy/*; do
-  if egrep "^kind: (Deployment$|StatefulSet)" $file >/dev/null \
+  if egrep "^kind: (Deployment$|StatefulSet$)" $file >/dev/null \
      && [[ "$(basename ${file%.*})" != "karmada-scheduler-estimator" ]] \
      && [[ "$(basename ${file%.*})" != "karmada-metrics-adapter" ]]; then
     files+=("${file}")
@@ -134,4 +134,5 @@ done
 
 echo "Start servers..."
 "${KARMADA_DIR}"/ctrl.sh start
-util::wait_until ${KARMADA_DIR}/bin/kubectl version -o yaml > /dev/null
+
+util::wait_until ${KARMADA_DIR}/bin/kubectl --kubeconfig=${KARMADA_KUBECONFIG} version -o yaml > /dev/null
